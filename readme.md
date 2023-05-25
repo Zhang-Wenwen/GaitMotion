@@ -19,7 +19,7 @@ We provide a dataset for the gait analysis which contains extensive ground truth
 
 ## Features
 
-This paper presents a comprehensive dataset on gait and an architecture for analyzing it. Gait deviations are closely related to specific parameters in the gait cycle, containing a combination of stance and swing phases with important events such as heel-strike and toe-off. Our dataset includes parameters on three different tasks that are crucial for healthcare professionals to assess disease and evaluate risk. The gait cycle consists of multiple critical states that support normal walking. Any failure in gait events can lead to the risk of falling. The on-off-ground status provides precise timing for heel-strike and toe-off events. The stance and swing phases, including details on single and double support times, determine the stability and balance during locomotion. Gait deviation is a significant indicator of disease conditions and is commonly associated with joint pathology, decreased muscular strength, range of motion constraints, and more. GaitMotion has rich ground truth labels which could support stride-to-stride fluctuation analysis in different types of walking. 
+GaitMotion dataset presents a comprehensive dataset on gait and an baseline model for analyzing it. Gait variablity are closely related to specific parameters in the gait cycle, containing a combination of stance and swing phases. Our dataset includes parameters on three different tasks: normal, Stroke and Parkinson's gaits. The gait cycle consists of multiple critical states that support walking. Any failure in gait events can lead to the risk of falling. GaitMotion has rich ground truth labels which could support stride-to-stride fluctuation analysis in different types of walking. 
 
 ![Project Screenshot](figure/figure1.png)
 
@@ -28,10 +28,11 @@ This paper presents a comprehensive dataset on gait and an architecture for anal
 To run the training:
 
 ```
-python train.py
+python train.py --type Normal Shuffle Stroke --seq_length 800 --seq_buffer 600 --subID 6 
+python train.py --type Normal Shuffle Stroke --seq_length 1000 --seq_buffer 800 --subID 5 
 ```
 
-Change the parameter accordingly. In the Common_fun.py, the seq_length parameter controls the step segmentation length. The subID is the participant ID that you hope to test with. The model will train the remaining subjects and test the subID participant. 
+Change the parameter accordingly. The seq_length parameter controls the step segmentation length. The subID is the participant ID that you hope to test with. The model will train the remaining subjects and test the subID participant. 
 
 ## Citation
 
