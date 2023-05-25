@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 from torch.utils.data import Dataset
-import matplotlib.pyplot as plt
 import pickle, os
 import utils, re
 
@@ -27,14 +26,6 @@ def Step_seg_zero_step(seq_buffer, data, seg_index, self, labels, file):
     data[:, 3:6] = np.radians(data[:, 3:6])
     
     for i in np.arange(1,len(seg)-1,1):   # IF WE DROP THE FIRST AND LAST STEP
-        fig, (ax1, ax2) = plt.subplots(ncols=2)
-        ax1.plot(data[diff_up[seg[i]]:diff_down[seg[i]], 0:3])
-        ax2.plot(data[diff_up[seg[i]]:diff_down[seg[i]], 3:6])
-        plt.xlabel("before padding")
-        fig.set_figheight(2.5)
-        fig.set_figwidth(5)
-        plt.show()
-
         acc = data[diff_up[seg[i]] - int(seq_buffer / 2):diff_down[seg[i]] + int(seq_buffer / 2), 0:3]
         gyro = data[diff_up[seg[i]] - int(seq_buffer / 2):diff_down[seg[i]] + int(seq_buffer / 2), 3:6]
         if len(acc) < 50:

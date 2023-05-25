@@ -1,5 +1,30 @@
 import numpy as np
 from scipy import signal
+import glob, random
+
+def prepare_files(args):
+    np.random.seed(args.seed)
+    random.seed(args.seed)
+    files = []
+    val_files = []
+    test_files = []
+    # train on the normal file data, randomly pick up three files as test data
+    for m_type in args.type:
+        files.extend(glob.glob("./"+m_type+"//*.pkl"))  
+
+    # random sample 10% of all the files as validation files
+    val_files = random.sample(files, int(0.1*len(files)))
+
+    # pick out all the data of one or several person for test
+    # test Shuffle/Normal/Stroke subjects separately
+    test_files=glob.glob("./Shuffle"+"//P"+args.subID+"_*.pkl")
+    test_files.extend(glob.glob("./Stroke"+"//P"+args.subID+"_*.pkl"))
+    test_files.extend(glob.glob("./Normal"+"//P"+args.subID+"_*.pkl"))    
+
+    files = list(set(files) - set(test_files))
+    files = list(set(files) - set(val_files))
+
+    return files, test_files, val_files
 
 
 def butter_lowpass_filter(data, w, fs, order=5):
@@ -27,7 +52,6 @@ def zupt(data):
     stationary_acc_L = (acc_mag > acc_stationary_threshold_L)
     stationary_acc = np.logical_and(stationary_acc_H, stationary_acc_L)  # C1
     stationary_gyro = (gyro_mag < gyro_stationary_threshold)  # C2
-    # plt.plot(gyro_mag),plt.plot(np.ones(datasize)*50),plt.show()
 
     stationary = np.logical_and(stationary_acc, stationary_gyro)
 
