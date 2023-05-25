@@ -17,8 +17,6 @@ GaitMotion: A Multitask Dataset for Pathological Gait Forecasting
 
 We provide a dataset for the gait analysis which contains extensive ground truths from gait events at the sample index level to gait parameters for normal and pathological walking patterns. We also provide a baseline model to predict the gait parameters from IMU recordings. 
 
-![Project Screenshot](figure/figure0.png)
-
 ## Features
 
 This paper presents a comprehensive dataset on gait and an architecture for analyzing it. Gait deviations are closely related to specific parameters in the gait cycle, containing a combination of stance and swing phases with important events such as heel-strike and toe-off. Our dataset includes parameters on three different tasks that are crucial for healthcare professionals to assess disease and evaluate risk. The gait cycle consists of multiple critical states that support normal walking. Any failure in gait events can lead to the risk of falling. The on-off-ground status provides precise timing for heel-strike and toe-off events. The stance and swing phases, including details on single and double support times, determine the stability and balance during locomotion. Gait deviation is a significant indicator of disease conditions and is commonly associated with joint pathology, decreased muscular strength, range of motion constraints, and more. GaitMotion has rich ground truth labels which could support stride-to-stride fluctuation analysis in different types of walking. 
