@@ -63,11 +63,11 @@ if __name__ == '__main__':
 
     files, test_files, val_files = utils.prepare_files(args)
 
-    test_dataset = LoadData.KneeDataset(filenames=test_files, batch_size=args.batch_size, seq_length=args.seq_length, seq_buffer=args.seq_buffer,
+    test_dataset = LoadData.GaitDataset(filenames=test_files, batch_size=args.batch_size, seq_length=args.seq_length, seq_buffer=args.seq_buffer,
                                         transform=transform, rate=args.rate, testing=1, mtype =args.type, testing_with_discard=1)
-    val_dataset = LoadData.KneeDataset(filenames=val_files, batch_size=args.batch_size, seq_length=args.seq_length, seq_buffer=args.seq_buffer,
+    val_dataset = LoadData.GaitDataset(filenames=val_files, batch_size=args.batch_size, seq_length=args.seq_length, seq_buffer=args.seq_buffer,
                                         transform=transform, rate=args.rate, testing=0, mtype =args.type)
-    train_dataset = LoadData.KneeDataset(filenames=files, batch_size=args.batch_size, seq_length=args.seq_length, seq_buffer=args.seq_buffer,
+    train_dataset = LoadData.GaitDataset(filenames=files, batch_size=args.batch_size, seq_length=args.seq_length, seq_buffer=args.seq_buffer,
                                         transform=transform, rate=args.rate, mtype =args.type)
 
     print("test size: "+str(len(test_dataset)))

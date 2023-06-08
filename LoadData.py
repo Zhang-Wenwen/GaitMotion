@@ -48,7 +48,7 @@ def Step_seg_zero_step(seq_buffer, data, seg_index, self, labels, file):
         self.labels.append(labels[i])
         self.data.append(np.concatenate((acc,gyro), axis=1))
 
-class KneeDataset(Dataset):
+class GaitDataset(Dataset):
     def __init__(self, filenames, batch_size, seq_length,seq_buffer, transform, rate=1000, testing=0, mtype="Normal",testing_with_discard=0):
         # `filenames` is a list of strings that contains all file names.
         # `batch_size` determines the number of files that we want to read in a chunk.
