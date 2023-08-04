@@ -1,6 +1,6 @@
 # Project Name
 
-GaitMotion: A Multitask Dataset for Pathological Gait Forecasting
+GaitMotion: A Multitask Dataset for Pathological Gait Forecasting. Please access our dataset at the [UBC dataverse.](https://doi.org/10.5683/SP3/V6C59O)
 
 ![Project Screenshot](./figure/figure0.png)
 
