@@ -34,6 +34,12 @@ python train.py --type Normal Shuffle Stroke --seq_length 1000 --seq_buffer 800 
 
 Change the parameter accordingly. The seq_length parameter controls the step segmentation length. The subID is the participant ID that you hope to test with. The model will train the remaining subjects and test the subID participant. 
 
+<!-- To run the transfer learning model which evalidate on the eGait dataset, please download the csv files from [google drive](https://drive.google.com/drive/folders/1Wtr-yn89HD1tjn-iImxRkAAldIZTGJcY?usp=sharing). -->
+To run the transfer learning model which evalidate on the eGait dataset:
+```
+python transfer_eval.py
+```
+
 ## Citation
 
 If you find the dataset or code useful, please cite our papers:
@@ -45,7 +51,4 @@ If you find the dataset or code useful, please cite our papers:
 We express our gratitude to the volunteers who participated in the data collection experiment. Thanks for Prof. Calvin Kuo's guidance on the data collection and arrangement. 
 
 <!-- ## License
-
-Specify the license under which your project is distributed. For example:
-
 This project is licensed under the [MIT License](LICENSE). -->
