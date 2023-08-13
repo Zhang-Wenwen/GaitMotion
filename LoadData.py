@@ -3,6 +3,7 @@ import pandas as pd
 from torch.utils.data import Dataset
 import pickle, os
 import utils, re
+import matplotlib.pyplot as plt
 
 def add_extra_info(file,init_step,num_files,subject_dict):
     # save the subject information in the dataframe. The stored information is: (1). ID of subject. (2). Walk type (Normal/Parkinson/Stroke). (3). start step of each trial.

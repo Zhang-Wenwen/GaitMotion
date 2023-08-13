@@ -27,6 +27,24 @@ def prepare_files(args):
     return files, test_files, val_files
 
 
+def eGait_files(args):
+    # random sample 2 files for testing, 2 files for eval
+    # use the rest files for testing
+    np.random.seed(args.seed)
+    random.seed(args.seed)
+    files = []
+    val_files = []
+    test_files =[]
+
+    dir_adres= "./eGait/ConvertedCSV/"
+    test_files.extend(glob.glob(dir_adres+"*.csv"))  
+    files = random.sample(test_files, 2)
+    test_files = list(set(test_files) - set(files))
+    val_files = random.sample(test_files, 2)
+    test_files = list(set(test_files) - set(val_files))
+
+    return files, test_files, val_files
+
 def butter_lowpass_filter(data, w, fs, order=5):
     # w = cutoff / (fs / 2)
     b, a = signal.butter(order, w, btype='low', analog=False, fs=fs)
