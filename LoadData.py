@@ -27,6 +27,7 @@ def Step_seg_zero_step(seq_buffer, data, seg_index, self, labels, file):
     data[:, 3:6] = np.radians(data[:, 3:6])
     
     for i in np.arange(1,len(seg)-1,1):   # IF WE DROP THE FIRST AND LAST STEP
+    #for i in np.arange(0,len(seg),1):   # IF WE DON'T DROP THE FIRST AND LAST STEP
         acc = data[diff_up[seg[i]] - int(seq_buffer / 2):diff_down[seg[i]] + int(seq_buffer / 2), 0:3]
         gyro = data[diff_up[seg[i]] - int(seq_buffer / 2):diff_down[seg[i]] + int(seq_buffer / 2), 3:6]
         if len(acc) < 50:
