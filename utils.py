@@ -85,3 +85,23 @@ def zupt(data):
 
     return (stationary.reshape((len(stationary), 1))).astype(int)
 
+def erosion_1d(signal, window_size=3):
+    padding = window_size // 2
+    padded_signal = np.pad(signal, (padding, padding), 'edge')
+    output = np.zeros_like(signal)
+    
+    for i in range(len(signal)):
+        output[i] = np.min(padded_signal[i:i+window_size])
+        
+    return output
+
+def dilation_1d(signal, window_size=3):
+    padding = window_size // 2
+    padded_signal = np.pad(signal, (padding, padding), 'edge')
+    output = np.zeros_like(signal)
+    
+    for i in range(len(signal)):
+        output[i] = np.max(padded_signal[i:i+window_size])
+        
+    return output
+

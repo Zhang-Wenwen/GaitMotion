@@ -10,8 +10,11 @@ def add_extra_info(file,init_step,num_files,subject_dict):
     # (4). stop step of each trial. (5). Which trial this is. (6). Left side/Right side of the file.
     [walking_type, sub_name] =  os.path.split(file)
     [sub_id, trial] = re.findall(r'\d+\.\d+|\d+', sub_name)
-    subject_dict=subject_dict.append({"subjectID": sub_id, "walkingtype": walking_type[2:], "start_steps":init_step, "end_steps": num_files, "trial":trial,"side":sub_name[-5]}, 
-                                      ignore_index=True)
+    
+    # subject_dict=subject_dict.append({"subjectID": sub_id, "walkingtype": walking_type[2:], "start_steps":init_step, "end_steps": num_files, 
+    #                                   "trial":trial,"side":sub_name[-5]}, ignore_index=True)
+    subject_dict=pd.concat([subject_dict, pd.DataFrame([{"subjectID": sub_id, "walkingtype": walking_type[2:], "start_steps":init_step, 
+                                                         "end_steps": num_files, "trial":trial,"side":sub_name[-5]}])], ignore_index=True)
     return subject_dict
 
 def Step_seg_zero_step(seq_buffer, data, seg_index, self, labels, file):
@@ -69,7 +72,7 @@ class GaitDataset(Dataset):
         init_step=0
         for file in self.filenames:
             with open(file, 'rb') as f:  
-                x, y, seg_index = pickle.load(f)
+                x, y, seg_index = pd.read_pickle(f)
             for i in np.arange(6):
                 x[:, i] = utils.butter_lowpass_filter(x[:, i], 20, self.rate, order=3)
 
