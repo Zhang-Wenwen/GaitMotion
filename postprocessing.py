@@ -39,8 +39,8 @@ def over_steps(predictions, ground_truth):
     ground_truth_steps_count = over_count_steps(ground_truth)
 
     # Calculate missing and overcounted steps
-    missing_steps = max(0, ground_truth_steps_count - prediction_steps_count)
-    overcounted_steps = max(0, prediction_steps_count - ground_truth_steps_count)
+    overcounted_steps = max(0, ground_truth_steps_count - prediction_steps_count)
+    missing_steps  = max(0, prediction_steps_count - ground_truth_steps_count)
 
     return missing_steps, overcounted_steps
 
@@ -73,8 +73,8 @@ if __name__ == '__main__':
     structuring_element = np.ones(kernel_size)
 
     # Apply morphological operations
-    n=50
-    p=34
+    n=235
+    p=0
     opening_result = binary_opening(mask_prd, structure=structuring_element)
     closing_result = binary_closing(opening_result, structure=structuring_element)
     # plt.figure(),plt.plot(erosion_result[2048*p:2048*n]),plt.plot(labels[2048*p:2048*n]*1.5, label='true label')
@@ -83,12 +83,10 @@ if __name__ == '__main__':
     # plt.savefig(read_dir+'dilation_result.png'), plt.close()
     # plt.figure(),plt.plot(opening_result[2048*p:2048*n]),plt.plot(labels[2048*p:2048*n]*1.5, label='true label')
     # plt.savefig(read_dir+'opening_result.png'), plt.close()
-    plt.figure(),plt.plot(closing_result[2048*p:2048*n]),plt.plot(labels[2048*p:2048*n]*1.5, label='true label')
-    plt.savefig(read_dir+'closing_result.png'), plt.show(), plt.close()
     # print("post processing segmentation results")
 
-    missing_steps, overcounted_steps=miss_over_count(closing_result[2048*p:2048*n], labels[2048*p:2048*n]) #[2048*p:2048*n]
-    print(f"missing_steps: {missing_steps}, overcounted_steps: {overcounted_steps}")
+    # missing_steps, overcounted_steps=miss_over_count(closing_result[2048*p:2048*n], labels[2048*p:2048*n]) #[2048*p:2048*n]
+    # print(f"missing_steps: {missing_steps}, overcounted_steps: {overcounted_steps}")
 
     missing_steps_ov=0
     overcounted_steps_ov = 0
@@ -97,14 +95,17 @@ if __name__ == '__main__':
         missing_steps, overcounted_steps=over_steps(closing_result[2048*indx:2048*(indx+inde_sep)], labels[2048*indx:2048*(indx+inde_sep)])
         missing_steps_ov += missing_steps
         overcounted_steps_ov += overcounted_steps
-        if missing_steps!=0 or overcounted_steps!=0:
-            print(f"missing_steps: {missing_steps}, overcounted_steps: {overcounted_steps}, index: {indx}")
+        # if missing_steps!=0 or overcounted_steps!=0:
+        #     print(f"missing_steps: {missing_steps}, overcounted_steps: {overcounted_steps}, index: {indx}")
     print(f"overall missing_steps: {overcounted_steps_ov}, overall overcounted_steps: {missing_steps_ov}")
 
-    missing_steps, overcounted_steps=over_steps(closing_result[2048*p:2048*n], labels[2048*p:2048*n])
-    print(f"test missing_steps: {missing_steps}, test overcounted_steps: {overcounted_steps}")
+    # missing_steps, overcounted_steps=over_steps(closing_result[2048*p:2048*n], labels[2048*p:2048*n])
+    # print(f"test missing_steps: {missing_steps}, test overcounted_steps: {overcounted_steps}")
 
     precision, recall, f1_score = compute_metrics(mask_prd, labels)
     print(f"Precision: {precision}, Recall: {recall}, F1 Score: {f1_score}")
 
     # np.savetxt(r'./outputs/seg_length=2048/5test_copy.csv',  np.c_[mask_prd[2048*p:2048*n], labels[2048*p:2048*n]], fmt='%i', delimiter=',') 
+
+    plt.figure(),plt.plot(closing_result[2048*p:2048*n],label='prediction'),plt.plot(labels[2048*p:2048*n]*1.5, label='true label')
+    plt.savefig(read_dir+'closing_result.png'), plt.show(), plt.close()

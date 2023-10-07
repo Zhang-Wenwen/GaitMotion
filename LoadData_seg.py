@@ -2,10 +2,11 @@ import numpy as np
 import pandas as pd
 from torch.utils.data import Dataset
 import pickle, os
-import utils, re
+import utils
 import matplotlib.pyplot as plt
 import torch
 from torch.nn.utils.rnn import pad_sequence
+
 
 def collate_fn(batch):
     # Sort the batch by sequence length
@@ -87,6 +88,8 @@ class segGaitDataset(Dataset):
         self.subject_dict = pd.DataFrame({}) #empty dict to save extra info 
         self.rate = rate
 
+        init_step = 0
+
         for file in self.filenames:
             # x[:,-2] is the ground truth for segmentation tasks
             # y is the ground truth for stride length prediction 
@@ -106,6 +109,9 @@ class segGaitDataset(Dataset):
             zero_indices = np.where(x[:,-2] == 0)[0]
 
             subarrays, labelarray = crop_subarrays_with_overlap(x[:-1], zero_indices, subarray_length=seq_length, overlap=0.3, savepng=file)
+            
+            self.subject_dict = utils.add_extra_info(file,init_step,init_step+len(subarrays)*self.seq_length,self.subject_dict)
+            init_step = init_step + len(subarrays)*self.seq_length
 
             self.labels.extend(labelarray)
             self.data.extend(subarrays)

@@ -81,6 +81,8 @@ if __name__ == '__main__':
     test_dataloader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False) #, collate_fn=LoadData_seg.collate_fn)
     val_dataloader = DataLoader(val_dataset, batch_size=args.batch_size, shuffle=False) #, collate_fn=LoadData_seg.collate_fn)
     
+
+    test_dataset.subject_dict.to_csv(r'./outputs/seg_length='+str(args.seq_length)+'/'+args.subID+'sub_info.csv',index=True)
     # model = LSTM_Segmenter(input_dim = args.input_size, hidden_dim=args.hidden_size)
     # model = UNet(1, 2)
     model = FCN8s(num_classes=2)

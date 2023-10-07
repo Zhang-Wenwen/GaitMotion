@@ -5,17 +5,7 @@ import pickle, os
 import utils, re
 import matplotlib.pyplot as plt
 
-def add_extra_info(file,init_step,num_files,subject_dict):
-    # save the subject information in the dataframe. The stored information is: (1). ID of subject. (2). Walk type (Normal/Parkinson/Stroke). (3). start step of each trial.
-    # (4). stop step of each trial. (5). Which trial this is. (6). Left side/Right side of the file.
-    [walking_type, sub_name] =  os.path.split(file)
-    [sub_id, trial] = re.findall(r'\d+\.\d+|\d+', sub_name)
-    
-    # subject_dict=subject_dict.append({"subjectID": sub_id, "walkingtype": walking_type[2:], "start_steps":init_step, "end_steps": num_files, 
-    #                                   "trial":trial,"side":sub_name[-5]}, ignore_index=True)
-    subject_dict=pd.concat([subject_dict, pd.DataFrame([{"subjectID": sub_id, "walkingtype": walking_type[2:], "start_steps":init_step, 
-                                                         "end_steps": num_files, "trial":trial,"side":sub_name[-5]}])], ignore_index=True)
-    return subject_dict
+
 
 def Step_seg_zero_step(seq_buffer, data, seg_index, self, labels, file):
     # this will separate acc and gyro data into step by step segment.
@@ -89,10 +79,10 @@ class GaitDataset(Dataset):
             # record the subject ID and the walking type for each step
             if testing:
                 if testing_with_discard:   # if discard the fisrt and last step.
-                    self.subject_dict = add_extra_info(file,init_step,seg_index[-1]+init_step-2,self.subject_dict)
+                    self.subject_dict = utils.add_extra_info(file,init_step,seg_index[-1]+init_step-2,self.subject_dict)
                     init_step += len(seg_index)-2
                 else:
-                    self.subject_dict = add_extra_info(file,init_step,seg_index[-1]+init_step,self.subject_dict)
+                    self.subject_dict = utils.add_extra_info(file,init_step,seg_index[-1]+init_step,self.subject_dict)
                     init_step += len(seg_index)
         print("finish loading, start training")
 

@@ -1,6 +1,8 @@
 import numpy as np
 from scipy import signal
 import glob, random
+import re, os
+import pandas as pd
 
 def prepare_files(args):
     np.random.seed(args.seed)
@@ -105,3 +107,14 @@ def dilation_1d(signal, window_size=3):
         
     return output
 
+def add_extra_info(file,init_step,num_files,subject_dict):
+    # save the subject information in the dataframe. The stored information is: (1). ID of subject. (2). Walk type (Normal/Parkinson/Stroke). (3). start step of each trial.
+    # (4). stop step of each trial. (5). Which trial this is. (6). Left side/Right side of the file.
+    [walking_type, sub_name] =  os.path.split(file)
+    [sub_id, trial] = re.findall(r'\d+\.\d+|\d+', sub_name)
+    
+    # subject_dict=subject_dict.append({"subjectID": sub_id, "walkingtype": walking_type[2:], "start_steps":init_step, "end_steps": num_files, 
+    #                                   "trial":trial,"side":sub_name[-5]}, ignore_index=True)
+    subject_dict=pd.concat([subject_dict, pd.DataFrame([{"subjectID": sub_id, "walkingtype": walking_type[2:], "start_steps":init_step, 
+                                                         "end_steps": num_files, "trial":trial,"side":sub_name[-5]}])], ignore_index=True)
+    return subject_dict
