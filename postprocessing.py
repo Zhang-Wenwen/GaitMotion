@@ -39,8 +39,8 @@ def over_steps(predictions, ground_truth):
     ground_truth_steps_count = over_count_steps(ground_truth)
 
     # Calculate missing and overcounted steps
-    overcounted_steps = max(0, ground_truth_steps_count - prediction_steps_count)
-    missing_steps  = max(0, prediction_steps_count - ground_truth_steps_count)
+    missing_steps  = max(0, ground_truth_steps_count - prediction_steps_count)
+    overcounted_steps  = max(0, prediction_steps_count - ground_truth_steps_count)
 
     return missing_steps, overcounted_steps
 
@@ -62,6 +62,17 @@ def compute_metrics(prediction, ground_truth):
 
     return precision, recall, f1_score
 
+def step_counts_sum(mask_prd, labels):
+    missing_steps_ov=0
+    overcounted_steps_ov = 0
+    inde_sep = 1
+    for indx in range(0,mask_prd.shape[0]//2048,inde_sep):
+        missing_steps, overcounted_steps=over_steps(mask_prd[2048*indx:2048*(indx+inde_sep)], labels[2048*indx:2048*(indx+inde_sep)])
+        missing_steps_ov += missing_steps
+        overcounted_steps_ov += overcounted_steps
+        # if missing_steps!=0 or overcounted_steps!=0:
+        #     print(f"missing_steps: {missing_steps}, overcounted_steps: {overcounted_steps}, index: {indx}")
+    print(f"overall missing_steps: {missing_steps_ov}, overall overcounted_steps: {overcounted_steps_ov}")
 
 if __name__ == '__main__':
     read_dir = 'outputs/seg_length=2048/'
@@ -77,7 +88,7 @@ if __name__ == '__main__':
     p=0
     opening_result = binary_opening(mask_prd, structure=structuring_element)
     closing_result = binary_closing(opening_result, structure=structuring_element)
-    # -------------- overall results caculation: overcounted and missed steps of the subject -------------- 
+    # -------------- overall results caculation: overcounted and missed steps of the subject -------------- #
     # plt.figure(),plt.plot(erosion_result[2048*p:2048*n]),plt.plot(labels[2048*p:2048*n]*1.5, label='true label')
     # plt.savefig(read_dir+'erosion_result.png'), plt.close()
     # plt.figure(),plt.plot(dilation_result[2048*p:2048*n]),plt.plot(labels[2048*p:2048*n]*1.5, label='true label')
@@ -89,16 +100,7 @@ if __name__ == '__main__':
     # missing_steps, overcounted_steps=miss_over_count(closing_result[2048*p:2048*n], labels[2048*p:2048*n]) #[2048*p:2048*n]
     # print(f"missing_steps: {missing_steps}, overcounted_steps: {overcounted_steps}")
 
-    missing_steps_ov=0
-    overcounted_steps_ov = 0
-    inde_sep = 1
-    for indx in range(0,closing_result.shape[0]//2048,inde_sep):
-        missing_steps, overcounted_steps=over_steps(closing_result[2048*indx:2048*(indx+inde_sep)], labels[2048*indx:2048*(indx+inde_sep)])
-        missing_steps_ov += missing_steps
-        overcounted_steps_ov += overcounted_steps
-        # if missing_steps!=0 or overcounted_steps!=0:
-        #     print(f"missing_steps: {missing_steps}, overcounted_steps: {overcounted_steps}, index: {indx}")
-    print(f"overall missing_steps: {overcounted_steps_ov}, overall overcounted_steps: {missing_steps_ov}")
+    step_counts_sum(closing_result, labels)
 
     # missing_steps, overcounted_steps=over_steps(closing_result[2048*p:2048*n], labels[2048*p:2048*n])
     # print(f"test missing_steps: {missing_steps}, test overcounted_steps: {overcounted_steps}")
@@ -111,4 +113,5 @@ if __name__ == '__main__':
     plt.figure(),plt.plot(closing_result[2048*p:2048*n],label='prediction'),plt.plot(labels[2048*p:2048*n]*1.5, label='true label')
     plt.savefig(read_dir+'closing_result.png'), plt.show(), plt.close()
 
-    ### ----- get the step counts error for each type of the gait patterns ------
+    ### ----- get the step counts error for each type of the gait patterns ------ ### 
+
