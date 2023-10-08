@@ -69,7 +69,7 @@ if __name__ == '__main__':
     mask_prd = outputs[:,0]
     labels = outputs[:,1]
 
-    kernel_size = 110
+    kernel_size = 128
     structuring_element = np.ones(kernel_size)
 
     # Apply morphological operations
@@ -77,6 +77,7 @@ if __name__ == '__main__':
     p=0
     opening_result = binary_opening(mask_prd, structure=structuring_element)
     closing_result = binary_closing(opening_result, structure=structuring_element)
+    # -------------- overall results caculation: overcounted and missed steps of the subject -------------- 
     # plt.figure(),plt.plot(erosion_result[2048*p:2048*n]),plt.plot(labels[2048*p:2048*n]*1.5, label='true label')
     # plt.savefig(read_dir+'erosion_result.png'), plt.close()
     # plt.figure(),plt.plot(dilation_result[2048*p:2048*n]),plt.plot(labels[2048*p:2048*n]*1.5, label='true label')
@@ -109,3 +110,5 @@ if __name__ == '__main__':
 
     plt.figure(),plt.plot(closing_result[2048*p:2048*n],label='prediction'),plt.plot(labels[2048*p:2048*n]*1.5, label='true label')
     plt.savefig(read_dir+'closing_result.png'), plt.show(), plt.close()
+
+    ### ----- get the step counts error for each type of the gait patterns ------
