@@ -114,4 +114,18 @@ if __name__ == '__main__':
     plt.savefig(read_dir+'closing_result.png'), plt.show(), plt.close()
 
     ### ----- get the step counts error for each type of the gait patterns ------ ### 
+    sub_info = pd.read_csv(read_dir+'5sub_info.csv')
+    aggregated_data = sub_info.groupby('walkingtype').agg({
+        'start_steps': 'min',
+        'end_steps': 'max'
+    }).reset_index()
+    for index, row in aggregated_data.iterrows():
+        walkingtype = row['walkingtype']
+        start_steps = row['start_steps']
+        end_steps = row['end_steps']
+        print(walkingtype)
+        step_counts_sum(closing_result[start_steps:end_steps], labels[start_steps:end_steps])
+        precision, recall, f1_score = compute_metrics(mask_prd[start_steps:end_steps], labels[start_steps:end_steps])
+        print(f"Precision: {precision}, Recall: {recall}, F1 Score: {f1_score}")
+
 
